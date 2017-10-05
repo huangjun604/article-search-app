@@ -8,19 +8,22 @@ var App = {
   defaultState: "loading",
 
   requests: {
-    getMe: {
-      url: "/api/v2/users/me.json"
+    searchArticles: function(params) {
+      return {
+        url: '/api/v2/help_center/articles/search.json?query=' + params,
+        type: 'GET'
+      };
     }
   },
 
   events: {
     "app.created": "init",
-    "app.willDestroy": "logClosedApp"
+    "app.willDestroy": "logClosedApp",
+    "click #submit-button": "searchArticles"
   },
 
   async init() {
-    const data = await this.ajax("getMe");
-    this.renderMain(data);
+    this.switchTo("main");
   },
 
   renderMain({ user }) {
@@ -29,6 +32,14 @@ var App = {
 
   logClosedApp() {
     console.log("About to close the app.");
+  },
+
+  searchArticles() {
+    var params = this.$('.search-bar').find('.search-box').val();
+    this.ajax("searchArticles", params).done(function(data) {
+      var resultsTemplate = this.renderTemplate('results', data);
+      this.$('.results').html(resultsTemplate);
+    });
   }
 };
 

@@ -1,0 +1,9 @@
+{{#if results.length}}
+  <table class="table">
+    {{#each results}}
+    <tr>
+      <td><a href="{{this.html_url}}" target="_blank">{{this.title}}</a></td>
+    </tr>
+    {{/each}}
+  </table>
+{{/if}}
