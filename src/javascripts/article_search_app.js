@@ -19,7 +19,9 @@ var App = {
   events: {
     "app.created": "init",
     "app.willDestroy": "logClosedApp",
-    "click #submit-button": "searchArticles"
+    "click #submit-button": "searchArticles",
+    "click .share-to-support": "shareToSupport",
+    "click .share-to-chat": "shareToChat"
   },
 
   async init() {
@@ -40,6 +42,18 @@ var App = {
       var resultsTemplate = this.renderTemplate('results', data);
       this.$('.results').html(resultsTemplate);
     });
+  },
+
+  shareToSupport(e) {
+    e.preventDefault();
+    var url = e.currentTarget.dataset.url;
+    this.zafClient.set('comment.text', url);
+  },
+
+  shareToChat(e) {
+    e.preventDefault();
+    var url = e.currentTarget.dataset.url;
+    this.zafClient.invoke('chat.postToChatTextArea', url);
   }
 };
 

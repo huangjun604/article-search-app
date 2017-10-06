@@ -3,6 +3,8 @@
     {{#each results}}
     <tr>
       <td><a href="{{this.html_url}}" target="_blank">{{this.title}}</a></td>
+      <td><button class="share-to-support" data-url="{{this.html_url}}">+</button></td>
+      <td><button class="share-to-chat" data-url="{{this.html_url}}">-</button></td>
     </tr>
     {{/each}}
   </table>
