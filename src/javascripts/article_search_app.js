@@ -28,10 +28,6 @@ var App = {
     this.switchTo("main");
   },
 
-  renderMain({ user }) {
-    this.switchTo("main", user);
-  },
-
   logClosedApp() {
     console.log("About to close the app.");
   },
