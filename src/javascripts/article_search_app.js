@@ -19,36 +19,72 @@ var App = {
   events: {
     "app.created": "init",
     "app.willDestroy": "logClosedApp",
-    "click #submit-button": "searchArticles",
-    "click .share-to-support": "shareToSupport",
-    "click .share-to-chat": "shareToChat"
+    "keydown .search-input": "onSearchKeyPressed",
+    "click .search-icon": "onSearchIconClicked",
+    "click .insert-link": "onShareButtonClicked"
   },
 
   async init() {
+
     this.switchTo("main");
+    $.ajax({
+      url: 'https://assets.zendesk.com/apps/sdk-assets/css/1/index.svg',
+      cache: false
+      }).done(function(data) {
+        const div = document.createElement('div');
+        div.innerHTML = new XMLSerializer().serializeToString(data.documentElement);
+        document.body.insertBefore(div, document.body.childNodes[0]);
+    });
   },
 
   logClosedApp() {
     console.log("About to close the app.");
   },
 
+  onSearchKeyPressed(e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      this.searchArticles();
+    }
+  },
+
+  onSearchIconClicked(e) {
+    e.preventDefault();
+    this.searchArticles();
+  },
+
+  onShareButtonClicked(e) {
+    e.preventDefault();
+    const url = e.currentTarget.dataset.url;
+    switch (this.currentLocation()) {
+      case 'ticket_sidebar':
+        this.shareToSupport(url);
+        break;
+      case 'chat_sidebar':
+        this.shareToChat(url);
+        break;
+    };
+  },
+
   searchArticles() {
-    var params = this.$('.search-bar').find('.search-box').val();
-    this.ajax("searchArticles", params).done(function(data) {
+    const query = this.getSearchQuery();
+    this.$('.results').html(this.renderTemplate('loading'));
+    this.ajax("searchArticles", query).done(function(data) {
+      this.zafClient.invoke('resize', { width: '100%', height: '400px' });
       var resultsTemplate = this.renderTemplate('results', data);
       this.$('.results').html(resultsTemplate);
     });
   },
 
-  shareToSupport(e) {
-    e.preventDefault();
-    var url = e.currentTarget.dataset.url;
+  getSearchQuery() {
+    return this.$('.search-bar').find('.search-input').val() || "\"\"";
+  },
+
+  shareToSupport(url) {
     this.zafClient.set('comment.text', url);
   },
 
-  shareToChat(e) {
-    e.preventDefault();
-    var url = e.currentTarget.dataset.url;
+  shareToChat(url) {
     this.zafClient.invoke('chat.postToChatTextArea', url);
   }
 };

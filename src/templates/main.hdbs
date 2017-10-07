@@ -1,6 +1,7 @@
-<p>{{t "hello" name=name}}</p>
-<div class='search-bar'>
-  <input class="search-box" type="text">
-  <button id="submit-button" class="btn" type="button">Search</button>
+<div class='search-bar c-txt-sm'>
+  <a class='search-icon'>
+    <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#zd-svg-icon-14-search"></use></svg>
+  </a>
+  <input class="search-input c-txt__input" type="text" placeholder="Search Article">
 </div>
 <div class='results'></div>
