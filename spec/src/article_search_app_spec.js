@@ -70,8 +70,6 @@ describe('ArticleSearchApp', () => {
       spyOn(app, 'getSearchQuery').and.returnValue('test');
     });
 
-    const query = 'domain';
-
     it('should query the articles', () => {
       const url = '/api/v2/help_center/articles/search.json?per_page=5&query=test';
 

@@ -20,6 +20,7 @@ var App = {
     "app.created": "init",
     "app.willDestroy": "logClosedApp",
     "fetchArticles.done": "loadResults",
+    "fetchArticles.error": "loadErrors",
     "keydown .search-input": "onSearchKeyPressed",
     "click .search-icon": "onSearchIconClicked",
     "click .insert-link": "onShareButtonClicked",
@@ -40,7 +41,7 @@ var App = {
   },
 
   logClosedApp() {
-    console.log("About to close the app.");
+    console.log("Byebye.");
   },
 
   onSearchKeyPressed(e) {
@@ -65,7 +66,7 @@ var App = {
       case 'chat_sidebar':
         this.shareToChat(url);
         break;
-    };
+    }
   },
 
   onPageLinkClicked(e) {
@@ -83,10 +84,14 @@ var App = {
   },
 
   loadResults(data) {
-    console.log(data);
     this.zafClient.invoke('resize', { width: '100%', height: '450px' });
     var resultsTemplate = this.renderTemplate('results', data);
     this.$('.results').html(resultsTemplate);
+  },
+
+  loadErrors(error) {
+    var errorTemplate = this.renderTemplate('error', data);
+    this.$('.results').html(errorTemplate);
   },
 
   getSearchQuery() {
