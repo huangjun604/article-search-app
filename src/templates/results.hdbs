@@ -1,13 +1,13 @@
 <div class="results-wrapper">
   <div class="results-count">
-    {{results.length}} Articles Found
+    Page {{page}} of {{count}} Articles Found
   </div>
   {{#if results.length}}
     <table class="results-table">
       {{#each results}}
       <tr>
         <td>
-          <a href="{{this.html_url}}" target="_blank">{{t this.title}}</a></br>
+          <a href="{{this.html_url}}" target="_blank">{{this.title}}</a></br>
           <span class="date">{{formatDate this.created_at}}</span>
         </td>
         <td><button class="insert-link c-btn c-btn--icon" data-url="{{this.html_url}}" title="Insert link">
@@ -16,5 +16,14 @@
       </tr>
       {{/each}}
     </table>
+
+    <ul class="search-results-pagination">
+      {{#if previous_page}}
+        <li><a data-url="{{previous_page}}" href="#" class="left page-link">&larr; Previous</a></li>
+      {{/if}}
+      {{#if next_page}}
+        <li><a data-url="{{next_page}}" href="#" class="right page-link">Next &rarr;</a></li>
+      {{/if}}
+    </ul>
   {{/if}}
 </div>

@@ -8,9 +8,9 @@ var App = {
   defaultState: "loading",
 
   requests: {
-    searchArticles: function(params) {
+    fetchArticles: function(url) {
       return {
-        url: '/api/v2/help_center/articles/search.json?query=' + params,
+        url: url,
         type: 'GET'
       };
     }
@@ -19,9 +19,11 @@ var App = {
   events: {
     "app.created": "init",
     "app.willDestroy": "logClosedApp",
+    "fetchArticles.done": "loadResults",
     "keydown .search-input": "onSearchKeyPressed",
     "click .search-icon": "onSearchIconClicked",
-    "click .insert-link": "onShareButtonClicked"
+    "click .insert-link": "onShareButtonClicked",
+    "click .page-link": "onPageLinkClicked"
   },
 
   async init() {
@@ -66,14 +68,25 @@ var App = {
     };
   },
 
+  onPageLinkClicked(e) {
+    e.preventDefault();
+    const url = e.currentTarget.dataset.url;
+    this.ajax("fetchArticles", url);
+  },
+
   searchArticles() {
     const query = this.getSearchQuery();
+    const url = '/api/v2/help_center/articles/search.json?per_page=5&query=' + query;
     this.$('.results').html(this.renderTemplate('loading'));
-    this.ajax("searchArticles", query).done(function(data) {
-      this.zafClient.invoke('resize', { width: '100%', height: '400px' });
-      var resultsTemplate = this.renderTemplate('results', data);
-      this.$('.results').html(resultsTemplate);
-    });
+
+    this.ajax("fetchArticles", url);
+  },
+
+  loadResults(data) {
+    console.log(data);
+    this.zafClient.invoke('resize', { width: '100%', height: '450px' });
+    var resultsTemplate = this.renderTemplate('results', data);
+    this.$('.results').html(resultsTemplate);
   },
 
   getSearchQuery() {
