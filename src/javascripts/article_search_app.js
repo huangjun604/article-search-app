@@ -23,21 +23,12 @@ var App = {
     "fetchArticles.error": "loadErrors",
     "keydown .search-input": "onSearchKeyPressed",
     "click .search-icon": "onSearchIconClicked",
-    "click .insert-link": "onShareButtonClicked",
+    "click .post-link": "onPostButtonClicked",
     "click .page-link": "onPageLinkClicked"
   },
 
   async init() {
-
     this.switchTo("main");
-    $.ajax({
-      url: 'https://assets.zendesk.com/apps/sdk-assets/css/1/index.svg',
-      cache: false
-      }).done(function(data) {
-        const div = document.createElement('div');
-        div.innerHTML = new XMLSerializer().serializeToString(data.documentElement);
-        document.body.insertBefore(div, document.body.childNodes[0]);
-    });
   },
 
   logClosedApp() {
@@ -56,15 +47,15 @@ var App = {
     this.searchArticles();
   },
 
-  onShareButtonClicked(e) {
+  onPostButtonClicked(e) {
     e.preventDefault();
     const url = e.currentTarget.dataset.url;
     switch (this.currentLocation()) {
       case 'ticket_sidebar':
-        this.shareToSupport(url);
+        this.postToSupport(url);
         break;
       case 'chat_sidebar':
-        this.shareToChat(url);
+        this.postToChat(url);
         break;
     }
   },
@@ -84,7 +75,7 @@ var App = {
   },
 
   loadResults(data) {
-    this.zafClient.invoke('resize', { width: '100%', height: '450px' });
+    this.zafClient.invoke('resize', { width: '100%', height: '380px' });
     var resultsTemplate = this.renderTemplate('results', data);
     this.$('.results').html(resultsTemplate);
   },
@@ -98,11 +89,11 @@ var App = {
     return this.$('.search-bar').find('.search-input').val() || "\"\"";
   },
 
-  shareToSupport(url) {
+  postToSupport(url) {
     this.zafClient.set('comment.text', url);
   },
 
-  shareToChat(url) {
+  postToChat(url) {
     this.zafClient.invoke('chat.postToChatTextArea', url);
   }
 };

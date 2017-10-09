@@ -58,13 +58,42 @@ https://subdomain.zendesk.com/agent/tickets/123?zat=true
 
 3. In your browser's Address bar, click the shield icon on the left (Chrome) or lock icon on the right (Firefox) and agree to load an unsafe script (Chrome) or to disable protection (Firefox). If you don't do this, the browser will block your app.
 
-The app should appear in a panel on the right of the agent interface:
+The app should appear in a panel on the right of the agent interface.
 
 ## Testing
 
 ```
-karma start my.conf.js
+karma start karma.conf.js
+```
+
+## Design
+
+### Fetch articles
+
+This app uses the `Help Center API` to query the articles.
+
+```
+Search Articles
+
+GET /api/v2/help_center/articles/search.json?query={search_string}
+```
+
+### Post to Support and Chat
+
+This app will check the current location in order to post the article links to related text area.
+
+When location is support side bar, call set comment endpoint in `Support API`:
+
+```
+client.set('comment.text', value)
+```
+
+When location is chat side bar, call post chat data endpoint in `Chat API`:
+
+```
+client.invoke('chat.postToChatTextArea', value);
 ```
 
 ## Copyright
+
 Copyright 2017 Stephen Huang

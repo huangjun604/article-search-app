@@ -84,48 +84,48 @@ describe('ArticleSearchApp', () => {
     });
   });
 
-  describe('#onShareButtonClicked', () => {
+  describe('#onPostLinkClicked', () => {
     beforeEach(() => {
-      spyOn(app, 'shareToSupport');
-      spyOn(app, 'shareToChat');
+      spyOn(app, 'postToSupport');
+      spyOn(app, 'postToChat');
     });
 
-    const shareButton = document.createElement('button');
-    shareButton.dataset.url = 'http://example.com';
+    const postLink = document.createElement('a');
+    postLink.dataset.url = 'http://example.com';
     const e = {
-      currentTarget: shareButton,
+      currentTarget: postLink,
       preventDefault: () => null
     };
 
-    it('should call share to support', () => {
+    it('should call post to support', () => {
       spyOn(app, 'currentLocation').and.returnValue('ticket_sidebar');
 
-      app.onShareButtonClicked(e);
-      expect(app.shareToSupport).toHaveBeenCalledWith('http://example.com');
+      app.onPostButtonClicked(e);
+      expect(app.postToSupport).toHaveBeenCalledWith('http://example.com');
     });
 
-    it('should call share to chat', () => {
+    it('should call post to chat', () => {
       spyOn(app, 'currentLocation').and.returnValue('chat_sidebar');
 
-      app.onShareButtonClicked(e);
-      expect(app.shareToChat).toHaveBeenCalledWith('http://example.com');
+      app.onPostButtonClicked(e);
+      expect(app.postToChat).toHaveBeenCalledWith('http://example.com');
     });
   });
 
-  describe('#shareToSupport', () => {
+  describe('#postToSupport', () => {
     beforeEach(() => {
       spyOn(client, 'set');
     });
     const url = 'http://example.com/';
 
     it('should post the url to support comment box', () => {
-      app.shareToSupport(url);
+      app.postToSupport(url);
 
       expect(client.set).toHaveBeenCalledWith('comment.text', 'http://example.com/');
     });
   });
 
-  describe('#shareToChat', () => {
+  describe('#postToChat', () => {
     beforeEach(() => {
       spyOn(client, 'invoke');
     });
@@ -133,7 +133,7 @@ describe('ArticleSearchApp', () => {
     const url = 'http://example.com/';
 
     it('should post the url to chat text area', () => {
-      app.shareToChat(url);
+      app.postToChat(url);
 
       expect(client.invoke).toHaveBeenCalledWith('chat.postToChatTextArea', 'http://example.com/');
     });

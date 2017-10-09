@@ -3,21 +3,37 @@
     Page {{page}} of {{count}} Articles Found
   </div>
   {{#if results.length}}
-    <table class="results-table">
+    {{!-- <table class="results-table">
       {{#each results}}
       <tr>
         <td>
           <a href="{{this.html_url}}" target="_blank">{{this.title}}</a></br>
           <span class="date">{{formatDate this.created_at}}</span>
+          <span class="actions">
+            <a class="post-link" data-url="{{this.html_url}}" title="Post link"><svg class="link-icon"><use xlink:href="./icon.svg#zd-svg-icon-14-link"></use></svg></a>
+          </span>
         </td>
-        <td><button class="insert-link c-btn c-btn--icon" data-url="{{this.html_url}}" title="Insert link">
-          <svg class="c-btn__icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#zd-svg-icon-14-link"></use></svg>
-        </button></td>
       </tr>
       {{/each}}
-    </table>
+    </table> --}}
 
-    <ul class="search-results-pagination">
+    <ul class="results-list">
+      {{#each results}}
+        <li>
+          <div class="title">
+            <a href="{{this.html_url}}" target="_blank" title="{{this.title}}">{{this.title}}</a>
+          </div>
+          <div>
+            <span class="date">{{formatDate this.created_at}}</span>
+            <span class="actions">
+              <a class="post-link" data-url="{{this.html_url}}" title="Post link"><svg class="link-icon"><use xlink:href="./icon.svg#zd-svg-icon-14-link"></use></svg></a>
+            </span>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+
+    <ul class="results-pagination">
       {{#if previous_page}}
         <li><a data-url="{{previous_page}}" href="#" class="left page-link">&larr; Previous</a></li>
       {{/if}}
